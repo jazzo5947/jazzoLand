@@ -1,4 +1,4 @@
-# jazzoAuction
+# :office: jazzoAuction
 
 ## 개요: 공공 api를 활용한 경공매 정보 조회 서비스
 - 원하는 조건으로 필터링된 물건정보를 매일 아침 메일로 전송
