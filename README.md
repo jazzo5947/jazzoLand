@@ -1,46 +1,37 @@
-# Getting Started with Create React App
+# otterAuction
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+개요: 공공 api를 활용한 경공매 정보 조회 서비스
 
-## Available Scripts
+- 원하는 조건으로 필터링된 물건정보를 매일 아침 메일로 전송
+- 지도에서 이런저런 조건으로 필터링 된 물건들만 조회가능(ex; 주거용 > 아파트, 주거용 > 단독주택 등)
+  <br>
 
-In the project directory, you can run:
+## 프로젝트 진행내역
 
-### `npm start`
+1. open api의 데이터를 가져온다. (성공!)
+2. 데이터를 프론트에서 뿌려준다.
+3. 프론트에 파라미터를 수정할 수 있는 폼을 만든다.
+4. 프론트에서 선택한 파라미터대로 데이터를 받아온다.
+5. 해당 데이터를 메일로 전송한다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Tech Stack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- react, typescript, python, fast-api
 
-### `npm test`
+## 관련 공공 api
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 공시지가
 
-### `npm run build`
+- <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15058796" target="_blank">국토교통부\_표준지공시지가정보서비스</a>
+- <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15059127" target="_blank">국토교통부\_개별공시지가정보서비스</a>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 경/공매
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15000849" target="_blank">한국자산관리공사\_이용기관공매물건조회서비스</a>
+- <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15000920" target="_blank">한국자산관리공사\_온비드코드조회서비스</a>
+- <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15000851" target="_blank">한국자산관리공사\_캠코공매물건조회서비스</a>
+- <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15000837" target="_blank">한국자산관리공사\_물건정보조회서비스</a>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 실거래가
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- 추후 추가예정
