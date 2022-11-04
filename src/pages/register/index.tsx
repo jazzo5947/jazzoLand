@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
 export default function Register() {
   return (
     <>
-      <h2>신청서</h2>
+      <h2 className="text-[24px] bold my-[20px]">신청서</h2>
       <form>
         <label>이름</label>
         <input type="text" />

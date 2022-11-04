@@ -1,23 +1,25 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import "./Menu";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function Menu() {
   return (
-    <nav>
-      <ul>
+    <nav className="bg-orange-600">
+      <ul className="flex w-1/2 justify-between py-[20px]">
         <li>
           <NavLink
-            className={({ isActive }) => (isActive ? "active" : "")}
+            className={({ isActive }) =>
+              isActive ? 'active text-white px-[40px]' : 'text-black px-[40px]'
+            }
             to="/"
           >
             메인
           </NavLink>
         </li>
         <li>
-          {/* <NavLink className={({ isActive }) => isActive ? "red" : "blue"} /> */}
           <NavLink
-            className={({ isActive }) => (isActive ? "active" : "")}
+            className={({ isActive }) =>
+              isActive ? 'active text-white px-[40px]' : 'text-black px-[40px]'
+            }
             to="/select"
           >
             필터 설정
@@ -25,7 +27,9 @@ export default function Menu() {
         </li>
         <li>
           <NavLink
-            className={({ isActive }) => (isActive ? "active" : "")}
+            className={({ isActive }) =>
+              isActive ? 'active text-white px-[40px]' : 'text-black px-[40px]'
+            }
             to="/map"
           >
             지도 보기
@@ -33,7 +37,9 @@ export default function Menu() {
         </li>
         <li>
           <NavLink
-            className={({ isActive }) => (isActive ? "acitve" : "")}
+            className={({ isActive }) =>
+              isActive ? 'active text-white px-[40px]' : 'text-black px-[40px]'
+            }
             to="/register"
           >
             메일 신청
