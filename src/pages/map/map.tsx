@@ -1,11 +1,12 @@
 /* global kakao */
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
+import Container from "../../components/Container";
 
 export default function Map() {
   const { kakao } = window as any;
 
   useEffect(() => {
-    const container = document.getElementById('map');
+    const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(33.450701, 126.570667),
     };
@@ -21,5 +22,9 @@ export default function Map() {
     marker.setMap(map);
   }, []);
 
-  return <div id="map" className="w-[500px] h-[400px]"></div>;
+  return (
+    <Container>
+      <div id="map" className="w-[500px] h-[400px]"></div>
+    </Container>
+  );
 }

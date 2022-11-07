@@ -1,5 +1,11 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHouseChimney,
+  faFilter,
+  faMapLocationDot,
+  faEnvelope,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Menu() {
   return (
@@ -8,41 +14,49 @@ export default function Menu() {
         <li>
           <NavLink
             className={({ isActive }) =>
-              isActive ? 'active text-white px-[40px]' : 'text-black px-[40px]'
+              isActive ? "active-menu" : "default-menu"
             }
             to="/"
           >
-            메인
+            <FontAwesomeIcon icon={faHouseChimney} className="mr-[5px]" />
+            <span className="isDesktop">메인</span>
           </NavLink>
         </li>
         <li>
           <NavLink
             className={({ isActive }) =>
-              isActive ? 'active text-white px-[40px]' : 'text-black px-[40px]'
+              isActive ? "active-menu" : "default-menu"
             }
             to="/select"
           >
-            필터 설정
+            <FontAwesomeIcon icon={faFilter} className="mr-[5px]" />
+            <span className="isDesktop">필터 설정</span>
           </NavLink>
         </li>
         <li>
           <NavLink
             className={({ isActive }) =>
-              isActive ? 'active text-white px-[40px]' : 'text-black px-[40px]'
+              isActive ? "active-menu" : "default-menu"
             }
             to="/map"
           >
-            지도 보기
+            <FontAwesomeIcon icon={faMapLocationDot} className="mr-[5px]" />
+            <span className="isDesktop">지도 보기</span>
           </NavLink>
         </li>
         <li>
           <NavLink
             className={({ isActive }) =>
-              isActive ? 'active text-white px-[40px]' : 'text-black px-[40px]'
+              isActive ? "active-menu" : "default-menu"
             }
             to="/register"
           >
-            메일 신청
+            <FontAwesomeIcon
+              icon={faEnvelope}
+              className="mr-[5px]"
+              title="메일 신청"
+            />
+            <span className="isDesktop">메일 신청</span>
           </NavLink>
         </li>
       </ul>

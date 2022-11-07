@@ -15,3 +15,46 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h2{
+  @apply text-[24px] font-bold;
+}
+
+section{
+  @apply border-b mb-[20px] pb-[20px];
+}
+
+.active-menu{
+  @apply text-white px-[20px]
+}
+
+.default-menu{
+  @apply text-black px-[20px]
+}
+
+.basic-input{
+  @apply border border-solid border-slate-700 m-5;
+}
+
+.basic-input-label{
+  @apply text-[14px];
+}
+
+.basic-submit-button{
+  @apply bg-orange-600 text-white py-[5px] px-[10px] my-[5px] mx-[10px] rounded ;
+}
+
+@media screen and (max-width: 700px) {
+  nav ul {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  nav ul li {
+    margin: 10px 0;
+  }
+
+  .isDesktop{
+    display: none;
+  }
+}

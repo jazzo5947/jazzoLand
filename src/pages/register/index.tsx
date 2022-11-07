@@ -1,17 +1,24 @@
-import React from 'react';
+import React from "react";
+import Container from "../../components/Container";
 
 export default function Register() {
   return (
-    <>
-      <h2 className="text-[24px] bold my-[20px]">신청서</h2>
-      <form>
-        <label>이름</label>
-        <input type="text" />
-        <label>메일주소</label>
-        <input type="text" />
-        <label>정보동의</label>
-        <input type="text" />
+    <Container>
+      <h2>신청서</h2>
+      <form className="flex flex-col">
+        <label className="basic-input-label">
+          이름
+          <input className="basic-input" type="text" />
+        </label>
+        <label className="basic-input-label">
+          메일주소
+          <input className="basic-input" type="text" />
+        </label>
+        <label className="basic-input-label">
+          정보동의
+          <input className="basic-input" type="text" />
+        </label>
       </form>
-    </>
+    </Container>
   );
 }
