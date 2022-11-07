@@ -72,3 +72,10 @@ async def getList():
     # print(datas, len(items))
 
     return {'message': datas}
+
+
+@app.get("/getAdrress")
+async def getAdr():
+    result = urlopen(
+        'https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json').read()
+    print(result)
