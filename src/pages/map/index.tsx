@@ -24,7 +24,22 @@ export default function Map() {
 
   return (
     <Container>
-      <div id="map" className="w-[500px] h-[400px]"></div>
+      <h2>지도 목록 조회</h2>
+      <section className="flex justify-center	">
+        <div id="map" className="w-[500px] h-[400px] mr-[20px]"></div>
+        <div className="">
+          <h3>물건목록</h3>
+          <ul>
+            <li>
+              <h4>2021-11222-001</h4>
+              <p>서울시 송파구 가락동...</p>
+              <p>최저가 9000만원</p>
+            </li>
+            <li>물건2</li>
+            <li>물건3</li>
+          </ul>
+        </div>
+      </section>
     </Container>
   );
 }

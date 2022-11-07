@@ -4,7 +4,7 @@ import Menu from "./components/Menu";
 import Register from "./pages/register";
 import SelectPage from "./pages/select-page";
 import { Routes, Route } from "react-router-dom";
-import Map from "./pages/map/map";
+import Map from "./pages/map";
 import Main from "./pages/main";
 
 function App() {

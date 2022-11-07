@@ -19,6 +19,7 @@ export default function Register() {
           <input className="basic-input" type="text" />
         </label>
       </form>
+      <input type="submit" className="basic-submit-button" value="신청" />
     </Container>
   );
 }

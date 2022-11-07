@@ -16,8 +16,16 @@ code {
     monospace;
 }
 
+p, span, li{
+  @apply text-[14px];
+}
+
 h2{
-  @apply text-[24px] font-bold;
+  @apply text-[24px] font-bold mb-[20px];
+}
+
+h3{
+  @apply text-[20px]
 }
 
 section{
