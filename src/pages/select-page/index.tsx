@@ -6,16 +6,55 @@ export default function SelectPage() {
 
   useEffect(() => {}, []);
 
+  // todo react-table 라이브러리 사용해보기
+  // todo 시군구 선택 옵션 라이브러리 or 수작업?
   return (
     <Container>
-      <h2>내 필터 추가</h2>
+      <h2>내 필터 설정</h2>
       <p>선택한 필터에 해당하는 물건을 메일링 서비스로 받아보실 수 있습니다.</p>
       <section className="filter-list">
         <h2>내 필터 목록</h2>
-        <ul>
-          <li>필터1: 조건1, 조건2, 조건3, 조건4, 조건5</li>
-          <li>필터1: 조건1, 조건2, 조건3, 조건4, 조건5</li>
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <td>번호</td>
+              <td>지역</td>
+              <td>종류</td>
+              <td>면적 (대지/건물)</td>
+              <td>감정가</td>
+              <td>최저가</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>필터 1</td>
+              <td>서울시 강동구 성내동</td>
+              <td>주거용 - 아파트</td>
+              <td>0m2 / 59m2</td>
+              <td>600,000,000원</td>
+              <td>380,000,000원</td>
+              <td>X</td>
+            </tr>
+            <tr>
+              <td>필터 2</td>
+              <td>서울시 강동구 성내동</td>
+              <td>주거용 - 아파트</td>
+              <td>0m2 / 59m2</td>
+              <td>600,000,000원</td>
+              <td>380,000,000원</td>
+              <td>X</td>
+            </tr>
+            <tr>
+              <td>필터 3</td>
+              <td>서울시 강동구 성내동</td>
+              <td>주거용 - 아파트</td>
+              <td>0m2 / 59m2</td>
+              <td>600,000,000원</td>
+              <td>380,000,000원</td>
+              <td>X</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
       <section className="filter-select-form-wrapper">
         <form id="filter-form">
