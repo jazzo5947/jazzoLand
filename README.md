@@ -1,7 +1,7 @@
 # :office: <a href="https://main.d2evb4li0pm9n3.amplifyapp.com/" target="_blank">jazzoAuction</a>
 
 ## 개요: 공공 api를 활용한 경공매 정보 조회 서비스
-- 원하는 조건으로 필터링된 물건정보를 매일 아침 메일로 전송
+- 원하는 조건으로 필터링된 물건정보를 주 1회 메일로 전송
 - 지도에서 이런저런 조건으로 필터링 된 물건들만 조회가능(ex; 주거용 > 아파트, 주거용 > 단독주택 등)
   <br>
 
