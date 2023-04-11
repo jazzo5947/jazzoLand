@@ -1,43 +1,44 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Container from "../../components/Container";
 import MyFilterList from "./my-filter-list";
 import MyFilterSetting from "./my-filter-setting";
-import {TFilterType} from "../../type/types";
+import { TFilterType } from "../../type/types";
 
 export default function SelectPage() {
-    const [siGunGuOptions, setSiGunGuOptions] = React.useState([]);
+  const [siGunGuOptions, setSiGunGuOptions] = React.useState([]);
 
-    useEffect(() => {
-    }, []);
+  useEffect(() => {}, []);
 
-    // todo react-table 라이브러리 사용해보기
-    // todo 시군구 선택 옵션 라이브러리 or 수작업?
+  // todo react-table 라이브러리 사용해보기
 
-    const filterList: TFilterType[] = [{
-        title: 'string',
-        juso: 'string',
-        gubun1: 'string',
-        gubun2: 'string',
-        land: 'string',
-        building: 'string',
-        standardPrice: 'string',
-        minPrice: 'string'
-    }, {
-        title: 'string',
-        juso: 'string',
-        gubun1: 'string',
-        gubun2: 'string',
-        land: 'string',
-        building: 'string',
-        standardPrice: 'string',
-        minPrice: 'string'
-    }];
+  const filterList: TFilterType[] = [
+    {
+      title: "string",
+      juso: "string",
+      gubun1: "string",
+      gubun2: "string",
+      land: "string",
+      building: "string",
+      standardPrice: "string",
+      minPrice: "string",
+    },
+    {
+      title: "string",
+      juso: "string",
+      gubun1: "string",
+      gubun2: "string",
+      land: "string",
+      building: "string",
+      standardPrice: "string",
+      minPrice: "string",
+    },
+  ];
 
-    return (
-        <Container>
-            <p>선택한 필터에 해당하는 물건을 메일링 서비스로 받아보실 수 있습니다.</p>
-            <MyFilterList filterList={filterList}/>
-            <MyFilterSetting/>
-        </Container>
-    );
+  return (
+    <Container>
+      <p>선택한 필터에 해당하는 물건을 메일링 서비스로 받아보실 수 있습니다.</p>
+      <MyFilterList filterList={filterList} />
+      <MyFilterSetting />
+    </Container>
+  );
 }
