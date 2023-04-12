@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { TFilterType, TSGGType } from "../../type/types";
-import axios from "axios";
+import React, { useEffect } from 'react';
+import { TFilterType, TSGGType } from '../type/types';
+import axios from 'axios';
 
 type PMyFilterSettingProps = {
   filterList: TFilterType[];
@@ -12,36 +12,36 @@ function MyFilterSetting(): JSX.Element {
   var errCnt = 0;
 
   useEffect(() => {
-    console.log("here222");
+    console.log('here222');
     getAccessToken();
   }, []);
 
   const getAccessToken = async () => {
     await axios
-      .get("https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json", {
+      .get('https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json', {
         params: {
-          consumer_key: "2ebdf6cf7ddd4eafa284",
-          consumer_secret: "ee54d708b71e4eac905c",
+          consumer_key: '2ebdf6cf7ddd4eafa284',
+          consumer_secret: 'ee54d708b71e4eac905c',
         },
       })
-      .then((res) => {
+      .then(res => {
         console.log(res.data.result);
         const accessToken = res.data.result.accessToken;
         console.log(accessToken);
         getSGG(accessToken);
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   };
 
   const getSGG = async (token: string) => {
     await axios
-      .get("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json", {
+      .get('https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json', {
         params: {
           accessToken: token,
-          pg_yn: "0",
+          pg_yn: '0',
         },
       })
-      .then((res) => {
+      .then(res => {
         const { data } = res;
         console.log(data);
         switch (parseInt(data.errCd)) {
@@ -63,7 +63,7 @@ function MyFilterSetting(): JSX.Element {
             break;
         }
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 
   return (
@@ -116,7 +116,7 @@ function MyFilterSetting(): JSX.Element {
           <input className="basic-input" type="text" />
         </div>
       </form>
-      <input type={"submit"} className="basic-submit-button" />
+      <input type={'submit'} className="basic-submit-button" />
     </section>
   );
 }

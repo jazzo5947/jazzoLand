@@ -16,40 +16,46 @@ code {
     monospace;
 }
 
-p, span, li{
+p,
+span,
+li {
   @apply text-[14px];
 }
 
-h2{
+h2 {
   @apply text-[24px] font-bold mb-[20px];
 }
 
-h3{
-  @apply text-[20px]
+h3 {
+  @apply text-[20px];
 }
 
-section{
+section {
   @apply border-b mb-[20px] pb-[20px];
 }
 
-.active-menu{
-  @apply text-white px-[20px]
+.active-menu {
+  @apply text-white px-[20px] underline;
 }
 
-.default-menu{
-  @apply text-black px-[20px]
+.default-menu {
+  @apply text-black px-[20px];
 }
 
-.basic-input{
+.default-menu:hover {
+  @apply text-black px-[20px] underline;
+}
+
+.basic-input {
   @apply border border-solid border-slate-700 m-5;
 }
 
-.basic-input-label{
+.basic-input-label {
   @apply text-[14px];
 }
 
-.basic-submit-button{
-  @apply bg-orange-600 text-white py-[5px] px-[10px] my-[5px] mx-[10px] rounded ;
+.basic-submit-button {
+  @apply bg-orange-600 text-white py-[5px] px-[10px] my-[5px] mx-[10px] rounded;
 }
 
 @media screen and (max-width: 700px) {
@@ -62,7 +68,7 @@ section{
     margin: 10px 0;
   }
 
-  .isDesktop{
+  .isDesktop {
     display: none;
   }
 }

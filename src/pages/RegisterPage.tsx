@@ -1,22 +1,21 @@
-import React from "react";
-import Container from "../../components/Container";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
+import React from 'react';
+import Container from '../components/Container';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 interface IRegisterFormInput {
   name: string;
   email: string;
   phone: string;
 }
-export default function Register() {
+export default function RegisterPage() {
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<IRegisterFormInput>();
 
-  const onSubmit: SubmitHandler<IRegisterFormInput> = (data) =>
-    console.log(data);
+  const onSubmit: SubmitHandler<IRegisterFormInput> = data => console.log(data);
 
   return (
     <Container>
@@ -26,8 +25,8 @@ export default function Register() {
           이름
           <input
             className="basic-input"
-            {...register("name", {
-              required: "이름을 두 글자 이상 입력하세요",
+            {...register('name', {
+              required: '이름을 두 글자 이상 입력하세요',
               minLength: 2,
             })}
           />
@@ -43,8 +42,8 @@ export default function Register() {
           <input
             type="email"
             className="basic-input"
-            {...register("email", {
-              required: "메일 주소를 확인해주세요",
+            {...register('email', {
+              required: '메일 주소를 확인해주세요',
               pattern:
                 /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
             })}
@@ -65,7 +64,7 @@ export default function Register() {
           <input
             type="number"
             className="basic-input"
-            {...register("phone", { required: "휴대폰번호를 확인해주세요" })}
+            {...register('phone', { required: '휴대폰번호를 확인해주세요' })}
           />
           <ErrorMessage
             className="text-red-600"

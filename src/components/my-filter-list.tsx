@@ -1,5 +1,5 @@
-import React from "react";
-import { TFilterType } from "../../type/types";
+import React from 'react';
+import { TFilterType } from '../type/types';
 
 type PMyFilterListProps = {
   filterList: TFilterType[];

@@ -1,7 +1,7 @@
-import React from "react";
-import Container from "../../components/Container";
+import React from 'react';
+import Container from '../components/Container';
 
-const Main = () => {
+export default function MainPage() {
   return (
     <Container>
       <h2>재조옥션</h2>
@@ -16,5 +16,4 @@ const Main = () => {
       </ul>
     </Container>
   );
-};
-export default Main;
+}

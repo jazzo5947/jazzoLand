@@ -1,12 +1,12 @@
 /* global kakao */
-import React, { useEffect } from "react";
-import Container from "../../components/Container";
+import React, { useEffect } from 'react';
+import Container from '../components/Container';
 
-export default function Map() {
+export default function MapPage() {
   const { kakao } = window as any;
 
   useEffect(() => {
-    const container = document.getElementById("map");
+    const container = document.getElementById('map');
     const options = {
       center: new kakao.maps.LatLng(33.450701, 126.570667),
     };
