@@ -47,15 +47,15 @@ section {
 }
 
 .basic-input {
-  @apply border border-solid border-slate-700 m-5;
+  @apply border border-solid border-slate-700 p-[5px] m-[10px] h-[36px];
 }
 
 .basic-input-label {
-  @apply text-[14px];
+  @apply text-[18px];
 }
 
 .basic-submit-button {
-  @apply bg-orange-600 text-white py-[5px] px-[10px] my-[5px] mx-[10px] rounded;
+  @apply bg-orange-600 text-white py-[5px] px-[10px] my-[5px] mx-[10px] rounded w-[100%] cursor-pointer text-[20px];
 }
 
 @media screen and (max-width: 700px) {

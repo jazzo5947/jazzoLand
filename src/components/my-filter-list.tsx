@@ -11,6 +11,12 @@ function MyFilterList(props: PMyFilterListProps) {
   return (
     <section className="filter-list">
       <h2>내 필터 목록</h2>
+      <div>
+        {filterList[0].id}. {filterList[0].juso} {filterList[0].gubun1}
+        {filterList[0].gubun2} / {filterList[0].land}㎡ /
+        {filterList[0].building}㎡ / {filterList[0].standardPrice} /
+        {filterList[0].minPrice}
+      </div>
       <table>
         <thead>
           <tr>
@@ -26,7 +32,7 @@ function MyFilterList(props: PMyFilterListProps) {
           {filterList.map((filter, idx) => {
             return (
               <tr key={idx}>
-                <td>{filter.title}</td>
+                <td>{filter.id}</td>
                 <td>{filter.juso}</td>
                 <td>
                   {filter.gubun1} - {filter.gubun2}
