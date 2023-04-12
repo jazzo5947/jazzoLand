@@ -1,56 +1,55 @@
-import React, { useEffect } from 'react';
-import { TFilterType, TSGGType } from '../type/types';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { TFilterType, TSGGType } from "../type/types";
+import axios from "axios";
 
 type PMyFilterSettingProps = {
   filterList: TFilterType[];
+};
+
+type TJuso = {
+  cd: string;
+  addr_name: string;
 };
 
 function MyFilterSetting(): JSX.Element {
   const [sgg, setSGG] = React.useState<TSGGType[]>([]);
 
   var errCnt = 0;
-
+  const [sido, setSido] = React.useState<TSGGType[]>();
   useEffect(() => {
     getAccessToken();
   }, []);
 
   const getAccessToken = async () => {
     await axios
-      .get('https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json', {
+      .get("https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json", {
         params: {
-          consumer_key: '2ebdf6cf7ddd4eafa284',
-          consumer_secret: 'ee54d708b71e4eac905c',
+          consumer_key: "2ebdf6cf7ddd4eafa284",
+          consumer_secret: "ee54d708b71e4eac905c",
         },
       })
-      .then(res => {
-        console.log(res.data.result);
+      .then((res) => {
         const accessToken = res.data.result.accessToken;
-        console.log(accessToken);
-        getSGG(accessToken);
+        getSido(accessToken);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   };
 
-  const getSGG = async (token: string) => {
+  const getSido = async (token: string) => {
+    console.log(token);
     await axios
-      .get('https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json', {
+      .get("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json", {
         params: {
           accessToken: token,
-          pg_yn: '0',
+          pg_yn: "0",
         },
       })
-      .then(res => {
+      .then((res) => {
         const { data } = res;
         console.log(data);
         switch (parseInt(data.errCd)) {
           case 0:
-            var totalcount = data.result.totalcount;
-            for (var i = 0; i < data.result.resultdata.length; i++) {
-              var resultdata = data.result.resultdata[i];
-              var x = resultdata.x;
-              var y = resultdata.y;
-            }
+            setSido(data.result);
             break;
           case -401:
             errCnt++;
@@ -62,16 +61,35 @@ function MyFilterSetting(): JSX.Element {
             break;
         }
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
+
+  const onSidoChangeHandler = (e: any) => {
+    console.log(e.target.value);
+    // to-do 시군구 콜
+  };
+
+  const onSiGunGuChangeHandler = (e: any) => {
+    console.log(e.target.value);
+    // todo 동읍면 콜
+  };
+
+  // todo 하위 주소 Call 함수를 만들어라!
 
   return (
     <section className="filter-select-form-wrapper">
       <form id="filter-form">
         <h2>내 필터 설정</h2>
         <label className="basic-input-label">지역</label>
-        <select className="basic-input">
+        <select className="basic-input" onChange={onSidoChangeHandler}>
           <option>시/도</option>
+          {sido?.map((si, idx) => {
+            return (
+              <option key={idx} value={si.cd}>
+                {si.addr_name}
+              </option>
+            );
+          })}
         </select>
 
         <select className="basic-input">
@@ -133,7 +151,7 @@ function MyFilterSetting(): JSX.Element {
         </div>
       </form>
       <input
-        type={'submit'}
+        type={"submit"}
         value="필터 추가"
         className="basic-submit-button"
       />
