@@ -9,7 +9,7 @@ export type TFilterType = {
   minPrice: string;
 };
 
-export type TSGGType = {
+export type TJusoType = {
   cd: string;
   addr_name: string;
   full_addr: string;

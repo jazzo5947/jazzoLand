@@ -1,55 +1,56 @@
-import React, { useEffect } from "react";
-import { TFilterType, TSGGType } from "../type/types";
-import axios from "axios";
+import React, { useEffect } from 'react';
+import { TFilterType, TJusoType } from '../type/types';
+import axios from 'axios';
 
 type PMyFilterSettingProps = {
   filterList: TFilterType[];
 };
 
-type TJuso = {
-  cd: string;
-  addr_name: string;
-};
-
 function MyFilterSetting(): JSX.Element {
-  const [sgg, setSGG] = React.useState<TSGGType[]>([]);
-
+  const [accToken, setAccToken] = React.useState('');
   var errCnt = 0;
-  const [sido, setSido] = React.useState<TSGGType[]>();
+  const [sido, setSido] = React.useState<TJusoType[]>();
+  const [sgk, setSgk] = React.useState<TJusoType[]>();
+  const [emd, setEmd] = React.useState<TJusoType[]>();
   useEffect(() => {
     getAccessToken();
   }, []);
 
   const getAccessToken = async () => {
     await axios
-      .get("https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json", {
+      .get('https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json', {
         params: {
-          consumer_key: "2ebdf6cf7ddd4eafa284",
-          consumer_secret: "ee54d708b71e4eac905c",
+          consumer_key: '2ebdf6cf7ddd4eafa284',
+          consumer_secret: 'ee54d708b71e4eac905c',
         },
       })
-      .then((res) => {
+      .then(res => {
         const accessToken = res.data.result.accessToken;
-        getSido(accessToken);
+        setAccToken(res.data.result.accessToken);
+        getJuso(accessToken, 'non', setSido);
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   };
 
-  const getSido = async (token: string) => {
-    console.log(token);
+  const getJuso = async (
+    _token: string,
+    _cd: string = 'non',
+    setResult: (result: any[]) => void
+  ) => {
     await axios
-      .get("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json", {
+      .get('https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json', {
         params: {
-          accessToken: token,
-          pg_yn: "0",
+          accessToken: _token,
+          pg_yn: '0',
+          cd: _cd,
         },
       })
-      .then((res) => {
+      .then(res => {
         const { data } = res;
         console.log(data);
         switch (parseInt(data.errCd)) {
           case 0:
-            setSido(data.result);
+            setResult(data.result);
             break;
           case -401:
             errCnt++;
@@ -61,50 +62,68 @@ function MyFilterSetting(): JSX.Element {
             break;
         }
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 
   const onSidoChangeHandler = (e: any) => {
     console.log(e.target.value);
-    // to-do 시군구 콜
+    getJuso(accToken, e.target.value, setSgk);
   };
 
-  const onSiGunGuChangeHandler = (e: any) => {
+  const onSgkChangeHandler = (e: any) => {
     console.log(e.target.value);
-    // todo 동읍면 콜
+    getJuso(accToken, e.target.value, setEmd);
   };
 
-  // todo 하위 주소 Call 함수를 만들어라!
+  const onSubmitHandler = (e: any) => {
+    // todo 일단 필터를 세팅하면 그 필터에 맞는 물건을 걸러오는 기능을 만들어보자
+    // todo 필터 저장소.. localStorage?
+
+    console.log('submitHandler');
+    // const params: TKamcoReqParams = {};
+    // getKamcoList(params);
+  };
 
   return (
     <section className="filter-select-form-wrapper">
-      <form id="filter-form">
+      <form id="filter-form" onSubmit={onSubmitHandler}>
         <h2>내 필터 설정</h2>
         <label className="basic-input-label">지역</label>
         <select className="basic-input" onChange={onSidoChangeHandler}>
           <option>시/도</option>
-          {sido?.map((si, idx) => {
+          {sido?.map((d, idx) => {
             return (
-              <option key={idx} value={si.cd}>
-                {si.addr_name}
+              <option key={idx} value={d.cd}>
+                {d.addr_name}
               </option>
             );
           })}
         </select>
-
-        <select className="basic-input">
+        <select className="basic-input" onChange={onSgkChangeHandler}>
           <option>구/군</option>
+          {sgk?.map((d, idx) => {
+            return (
+              <option key={idx} value={d.cd}>
+                {d.addr_name}
+              </option>
+            );
+          })}{' '}
         </select>
-
         <select className="basic-input">
           <option>읍/면/동</option>
+          {emd?.map((d, idx) => {
+            return (
+              <option key={idx} value={d.cd}>
+                {d.addr_name}
+              </option>
+            );
+          })}{' '}
         </select>
         <input
           type="text"
           className="basic-input"
           placeholder="나머지주소 직접입력"
         />
-
         <div>
           <label className="basic-input-label">
             종류
@@ -124,7 +143,6 @@ function MyFilterSetting(): JSX.Element {
             </select>
           </label>
         </div>
-
         <div>
           <label className="basic-input-label">
             대지면적
@@ -138,7 +156,6 @@ function MyFilterSetting(): JSX.Element {
             <span>㎡</span>
           </label>
         </div>
-
         <div>
           <label className="basic-input-label">
             감정가
@@ -149,12 +166,12 @@ function MyFilterSetting(): JSX.Element {
             <input className="basic-input" type="text" />
           </label>
         </div>
+        <input
+          type={'submit'}
+          value="필터 추가"
+          className="basic-submit-button"
+        />
       </form>
-      <input
-        type={"submit"}
-        value="필터 추가"
-        className="basic-submit-button"
-      />
     </section>
   );
 }
