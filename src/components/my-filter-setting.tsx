@@ -26,22 +26,21 @@ function MyFilterSetting(): JSX.Element {
       })
       .then(res => {
         const accessToken = res.data.result.accessToken;
-        setAccToken(res.data.result.accessToken);
-        getJuso(accessToken, 'non', setSido);
+        setAccToken(accessToken);
+        getJuso(accessToken, setSido);
       })
       .catch(e => console.log(e));
   };
 
   const getJuso = async (
     _token: string,
-    _cd: string = 'non',
-    setResult: (result: any[]) => void
+    setResult: (result: any[]) => void,
+    _cd?: string
   ) => {
     await axios
       .get('https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json', {
         params: {
           accessToken: _token,
-          pg_yn: '0',
           cd: _cd,
         },
       })
@@ -66,13 +65,11 @@ function MyFilterSetting(): JSX.Element {
   };
 
   const onSidoChangeHandler = (e: any) => {
-    console.log(e.target.value);
-    getJuso(accToken, e.target.value, setSgk);
+    getJuso(accToken, setSgk, e.target.value);
   };
 
   const onSgkChangeHandler = (e: any) => {
-    console.log(e.target.value);
-    getJuso(accToken, e.target.value, setEmd);
+    getJuso(accToken, setEmd, e.target.value);
   };
 
   const onSubmitHandler = (e: any) => {
@@ -85,94 +82,97 @@ function MyFilterSetting(): JSX.Element {
   };
 
   return (
-    <section className="filter-select-form-wrapper">
-      <form id="filter-form" onSubmit={onSubmitHandler}>
-        <h2>내 필터 설정</h2>
-        <label className="basic-input-label">지역</label>
-        <select className="basic-input" onChange={onSidoChangeHandler}>
-          <option>시/도</option>
-          {sido?.map((d, idx) => {
-            return (
-              <option key={idx} value={d.cd}>
-                {d.addr_name}
-              </option>
-            );
-          })}
-        </select>
-        <select className="basic-input" onChange={onSgkChangeHandler}>
-          <option>구/군</option>
-          {sgk?.map((d, idx) => {
-            return (
-              <option key={idx} value={d.cd}>
-                {d.addr_name}
-              </option>
-            );
-          })}{' '}
-        </select>
-        <select className="basic-input">
-          <option>읍/면/동</option>
-          {emd?.map((d, idx) => {
-            return (
-              <option key={idx} value={d.cd}>
-                {d.addr_name}
-              </option>
-            );
-          })}{' '}
-        </select>
-        <input
-          type="text"
-          className="basic-input"
-          placeholder="나머지주소 직접입력"
-        />
-        <div>
-          <label className="basic-input-label">
-            종류
-            <select className="basic-input" id="ctgrHirkId">
-              <option>전체</option>
-              <option>주거용</option>
-              <option>업무용</option>
-              <option>토지</option>
-              <option>기타</option>
-            </select>
-          </label>
+    <>
+      <section className="filter-select-form-wrapper">
+        <form id="filter-form" onSubmit={onSubmitHandler}>
+          <h2>내 필터 설정</h2>
+          <label className="basic-input-label">지역</label>
+          <select className="basic-input" onChange={onSidoChangeHandler}>
+            <option>시/도</option>
+            {sido?.map((d, idx) => {
+              return (
+                <option key={idx} value={d.cd}>
+                  {d.addr_name}
+                </option>
+              );
+            })}
+          </select>
+          <select className="basic-input" onChange={onSgkChangeHandler}>
+            <option>구/군</option>
+            {sgk?.map((d, idx) => {
+              return (
+                <option key={idx} value={d.cd}>
+                  {d.addr_name}
+                </option>
+              );
+            })}{' '}
+          </select>
+          <select className="basic-input">
+            <option>읍/면/동</option>
+            {emd?.map((d, idx) => {
+              return (
+                <option key={idx} value={d.cd}>
+                  {d.addr_name}
+                </option>
+              );
+            })}{' '}
+          </select>
+          <input
+            type="text"
+            className="basic-input"
+            placeholder="나머지주소 직접입력"
+          />
+          <div>
+            <label className="basic-input-label">
+              종류
+              <select className="basic-input" id="ctgrHirkId">
+                <option>전체</option>
+                <option>주거용</option>
+                <option>업무용</option>
+                <option>토지</option>
+                <option>기타</option>
+              </select>
+            </label>
 
-          <label className="basic-input-label">
-            세부종류
-            <select className="basic-input" id="ctgrHirkIdMid">
-              <option>전체</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label className="basic-input-label">
-            대지면적
-            <input className="basic-input" type="number" />
-            <span>㎡ / </span>
-          </label>
+            <label className="basic-input-label">
+              세부종류
+              <select className="basic-input" id="ctgrHirkIdMid">
+                <option>전체</option>
+              </select>
+            </label>
+          </div>
+          <div>
+            <label className="basic-input-label">
+              대지면적
+              <input className="basic-input" type="number" />
+              <span>㎡ / </span>
+            </label>
 
-          <label className="basic-input-label">
-            건물면적
-            <input className="basic-input" type="number" />
-            <span>㎡</span>
-          </label>
-        </div>
-        <div>
-          <label className="basic-input-label">
-            감정가
-            <input className="basic-input" type="text" />
-          </label>
-          <label className="basic-input-label">
-            최저가
-            <input className="basic-input" type="text" />
-          </label>
-        </div>
-        <input
-          type={'submit'}
-          value="필터 추가"
-          className="basic-submit-button"
-        />
-      </form>
-    </section>
+            <label className="basic-input-label">
+              건물면적
+              <input className="basic-input" type="number" />
+              <span>㎡</span>
+            </label>
+          </div>
+          <div>
+            <label className="basic-input-label">
+              감정가
+              <input className="basic-input" type="text" />
+            </label>
+            <label className="basic-input-label">
+              최저가
+              <input className="basic-input" type="text" />
+            </label>
+          </div>
+          <input
+            type={'submit'}
+            value="필터 추가"
+            className="basic-submit-button"
+          />
+        </form>
+      </section>
+      <div>여기에 결과값이 나오는 거야 </div>
+    </>
   );
 }
 
