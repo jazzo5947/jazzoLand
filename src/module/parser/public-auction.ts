@@ -1,3 +1,4 @@
+
 const serviceKey =
   'ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D';
 const url =
@@ -56,7 +57,7 @@ type TKamcoResponse = {
   iqryCnt: number;
 };
 
-function getKamcoList(params: TKamcoReqParams) {
+export function getKamcoList(params: TKamcoReqParams) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', req_url);
   xhr.onreadystatechange = function () {

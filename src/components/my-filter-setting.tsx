@@ -1,35 +1,66 @@
-import React, { useEffect } from 'react';
-import { TFilterType, TJusoType } from '../type/types';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { TFilterType, TJusoType } from "../type/types";
+import axios from "axios";
 
 type PMyFilterSettingProps = {
   filterList: TFilterType[];
 };
 
+const encCodeKey =
+  "ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D";
+const decCodeKey =
+  "ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU+A==";
+
 function MyFilterSetting(): JSX.Element {
-  const [accToken, setAccToken] = React.useState('');
+  const [accToken, setAccToken] = React.useState("");
   var errCnt = 0;
   const [sido, setSido] = React.useState<TJusoType[]>();
   const [sgk, setSgk] = React.useState<TJusoType[]>();
   const [emd, setEmd] = React.useState<TJusoType[]>();
+
+  var xhr = new XMLHttpRequest();
+  var url =
+    "https://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidTopCodeInfo"; /*URL*/
+  var queryParams =
+    "?" + encodeURIComponent("serviceKey") + "=" + encCodeKey; /*Service Key*/
+  queryParams +=
+    "&" + encodeURIComponent("numOfRows") + "=" + encodeURIComponent("10"); /**/
+  queryParams +=
+    "&" + encodeURIComponent("pageNo") + "=" + encodeURIComponent("1"); /**/
+  xhr.open("GET", url + queryParams);
+  xhr.onreadystatechange = function () {
+    if (this.readyState === 4) {
+      console.log(
+        "Status: " +
+          this.status +
+          "nHeaders: " +
+          JSON.stringify(this.getAllResponseHeaders()) +
+          "nBody: " +
+          this.responseText
+      );
+    }
+  };
+
+  xhr.send("");
+
   useEffect(() => {
     getAccessToken();
   }, []);
 
   const getAccessToken = async () => {
     await axios
-      .get('https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json', {
+      .get("https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json", {
         params: {
-          consumer_key: '2ebdf6cf7ddd4eafa284',
-          consumer_secret: 'ee54d708b71e4eac905c',
+          consumer_key: "2ebdf6cf7ddd4eafa284",
+          consumer_secret: "ee54d708b71e4eac905c",
         },
       })
-      .then(res => {
+      .then((res) => {
         const accessToken = res.data.result.accessToken;
         setAccToken(accessToken);
         getJuso(accessToken, setSido);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   };
 
   const getJuso = async (
@@ -38,15 +69,15 @@ function MyFilterSetting(): JSX.Element {
     _cd?: string
   ) => {
     await axios
-      .get('https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json', {
+      .get("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json", {
         params: {
           accessToken: _token,
           cd: _cd,
         },
       })
-      .then(res => {
+      .then((res) => {
         const { data } = res;
-        console.log(data);
+        // console.log(data);
         switch (parseInt(data.errCd)) {
           case 0:
             setResult(data.result);
@@ -61,7 +92,7 @@ function MyFilterSetting(): JSX.Element {
             break;
         }
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
 
   const onSidoChangeHandler = (e: any) => {
@@ -72,11 +103,13 @@ function MyFilterSetting(): JSX.Element {
     getJuso(accToken, setEmd, e.target.value);
   };
 
+  // todo 온비드코드도 조회해와야해
+
   const onSubmitHandler = (e: any) => {
     // todo 일단 필터를 세팅하면 그 필터에 맞는 물건을 걸러오는 기능을 만들어보자
     // todo 필터 저장소.. localStorage?
 
-    console.log('submitHandler');
+    console.log("submitHandler");
     // const params: TKamcoReqParams = {};
     // getKamcoList(params);
   };
@@ -105,7 +138,7 @@ function MyFilterSetting(): JSX.Element {
                   {d.addr_name}
                 </option>
               );
-            })}{' '}
+            })}{" "}
           </select>
           <select className="basic-input">
             <option>읍/면/동</option>
@@ -115,7 +148,7 @@ function MyFilterSetting(): JSX.Element {
                   {d.addr_name}
                 </option>
               );
-            })}{' '}
+            })}{" "}
           </select>
           <input
             type="text"
@@ -165,7 +198,7 @@ function MyFilterSetting(): JSX.Element {
             </label>
           </div>
           <input
-            type={'submit'}
+            type={"submit"}
             value="필터 추가"
             className="basic-submit-button"
           />

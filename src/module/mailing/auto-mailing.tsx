@@ -1,9 +1,9 @@
-import React from 'react';
-import MailLayout from './mail-layout';
-import { getKamcoList } from '../parser/public-auction';
+import React from "react";
+import MailLayout from "./mail-layout";
+// import { getKamcoList } from '../parser/public-auction';
 
 export default function AutoMailingPage() {
-  getKamcoList();
+  // getKamcoList();
   return (
     <div>
       <MailLayout />
