@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHouseChimney,
   faFilter,
-  faMapLocationDot,
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -31,17 +30,6 @@ export default function Menu() {
           >
             <FontAwesomeIcon icon={faFilter} className="mr-[5px]" />
             <span className="isDesktop">필터 설정</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? 'active-menu' : 'default-menu'
-            }
-            to="/map"
-          >
-            <FontAwesomeIcon icon={faMapLocationDot} className="mr-[5px]" />
-            <span className="isDesktop">지도 보기</span>
           </NavLink>
         </li>
         <li>
