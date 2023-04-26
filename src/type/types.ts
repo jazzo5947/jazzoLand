@@ -17,3 +17,15 @@ export type TJusoType = {
   y_coor: string;
   pg: string;
 };
+
+export type TLandType = {
+  resultCode: string;
+  resultMsg: string;
+  numOfRows: string;
+  pageNo: string;
+  totalCount: string;
+  ctgrId: string;
+  ctgrNm: string;
+  ctgrHirkId: string;
+  ctgrHirkNm: string
+}
