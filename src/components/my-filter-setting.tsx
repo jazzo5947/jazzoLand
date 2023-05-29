@@ -76,20 +76,41 @@ function MyFilterSetting(): JSX.Element {
 
   const getLandCd = async () => {
     const code_url =
-      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidTopCodeInfo";
+      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo";
 
+    const heroku_proxy = "https://jazzo-land.herokuapp.com/";
     const full_url =
-      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidTopCodeInfo?serviceKey=ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D&numOfRows=10&pageNo=1";
+      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo?serviceKey=ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D&numOfRows=10&pageNo=1&CTGR_ID=10000";
     // await fetch(code_url + "?" + "serviceKey" + "=" + encCodeKey)
     // .then((res) => res.text())
-    const res = await fetch(full_url, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    }).then((res) => {
+    const res = await fetch(heroku_proxy + full_url).then((res) => {
       return res.text();
     });
     console.log(res);
+    parseXML(res);
+    // XML 파싱해서 setLandCd 해주면 되겠네용~~~
+  };
+
+  const parseXML = (xmlData: string) => {
+    const landTypeList = new Array<{
+      ctgrId: string;
+      ctgrNm: string;
+    }>();
+    const parser = new DOMParser();
+    const parsedXml = parser.parseFromString(xmlData, "text/xml");
+    const items = parsedXml.getElementsByTagName("item");
+
+    for (let i = 0; i < items.length; i++) {
+      const ctgrId = items[i].children[1].innerHTML;
+      const ctgrNm = items[i].children[2].innerHTML;
+      console.log(ctgrId, ctgrNm);
+
+      landTypeList.push({
+        ctgrId: ctgrId,
+        ctgrNm: ctgrNm,
+      });
+    }
+    console.log(landTypeList);
   };
 
   const onSidoChangeHandler = (e: any) => {
