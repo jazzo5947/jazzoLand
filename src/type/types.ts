@@ -19,13 +19,6 @@ export type TJusoType = {
 };
 
 export type TLandType = {
-  resultCode: string;
-  resultMsg: string;
-  numOfRows: string;
-  pageNo: string;
-  totalCount: string;
   ctgrId: string;
   ctgrNm: string;
-  ctgrHirkId: string;
-  ctgrHirkNm: string
-}
+};

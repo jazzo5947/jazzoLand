@@ -17,13 +17,19 @@ function MyFilterSetting(): JSX.Element {
   const [sido, setSido] = React.useState<TJusoType[]>();
   const [sgk, setSgk] = React.useState<TJusoType[]>();
   const [emd, setEmd] = React.useState<TJusoType[]>();
+  const [selectedJuso, setSelectedJuso] = React.useState({
+    sido: "",
+    sgk: "",
+    emd: "",
+    detail: "",
+  });
 
   const [landTypeList, setLandTypeList] = React.useState<TLandType[]>();
   const [scndLandTypeList, setScndLandTypeList] = React.useState<TLandType[]>();
 
   useEffect(() => {
     getAccessToken();
-    getLandCd();
+    getMiddleLandCd();
   }, []);
 
   const getAccessToken = async () => {
@@ -74,24 +80,19 @@ function MyFilterSetting(): JSX.Element {
       .catch((error) => console.log(error));
   };
 
-  const getLandCd = async () => {
+  const getMiddleLandCd = async () => {
     const code_url =
       "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo";
 
     const heroku_proxy = "https://jazzo-land.herokuapp.com/";
-    const full_url =
-      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo?serviceKey=ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D&numOfRows=10&pageNo=1&CTGR_ID=10000";
-    // await fetch(code_url + "?" + "serviceKey" + "=" + encCodeKey)
-    // .then((res) => res.text())
+    const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=10000`;
     const res = await fetch(heroku_proxy + full_url).then((res) => {
       return res.text();
     });
-    console.log(res);
-    parseXML(res);
-    // XML 파싱해서 setLandCd 해주면 되겠네용~~~
+    parseXML(res, "MID");
   };
 
-  const parseXML = (xmlData: string) => {
+  const parseXML = (xmlData: string, type: string) => {
     const landTypeList = new Array<{
       ctgrId: string;
       ctgrNm: string;
@@ -103,33 +104,75 @@ function MyFilterSetting(): JSX.Element {
     for (let i = 0; i < items.length; i++) {
       const ctgrId = items[i].children[1].innerHTML;
       const ctgrNm = items[i].children[2].innerHTML;
-      console.log(ctgrId, ctgrNm);
 
       landTypeList.push({
         ctgrId: ctgrId,
         ctgrNm: ctgrNm,
       });
     }
-    console.log(landTypeList);
+    if (type === "MID") setLandTypeList(landTypeList);
+    else if (type === "BOTTOM") setScndLandTypeList(landTypeList);
   };
 
   const onSidoChangeHandler = (e: any) => {
     getJuso(accToken, setSgk, e.target.value);
+    setSelectedJuso((prev) => {
+      return { ...prev, sido: e.target.value };
+    });
   };
 
   const onSgkChangeHandler = (e: any) => {
     getJuso(accToken, setEmd, e.target.value);
+    setSelectedJuso((prev) => {
+      return { ...prev, sgk: e.target.value };
+    });
   };
 
-  // todo 온비드코드도 조회해와야해
+  const onEmdChangeHandler = (e: any) => {
+    setSelectedJuso((prev) => {
+      return { ...prev, emd: e.target.value };
+    });
+  };
+  // todo 필터 저장소.. localStorage?
 
   const onSubmitHandler = (e: any) => {
+    e.preventDefault();
     // todo 일단 필터를 세팅하면 그 필터에 맞는 물건을 걸러오는 기능을 만들어보자
-    // todo 필터 저장소.. localStorage?
 
-    console.log("submitHandler");
-    // const params: TKamcoReqParams = {};
-    // getKamcoList(params);
+    console.log(selectedJuso);
+  };
+
+  const onChangeMiddleLandCdHandler = (e: any) => {
+    const ctgrId = e.target.value;
+    getBottomLandCd(ctgrId);
+  };
+
+  const onChangeBottomLandCdHandler = (e: any) => {
+    const ctgrId = e.target.value;
+  };
+
+  const getBottomLandCd = async (ctgrId: string) => {
+    const code_url =
+      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidBottomCodeInfo";
+
+    const heroku_proxy = "https://jazzo-land.herokuapp.com/";
+    const full_url = `http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidBottomCodeInfo?serviceKey=ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D&numOfRows=10&pageNo=1&CTGR_ID=${ctgrId}`;
+    const res = await fetch(heroku_proxy + full_url).then((res) => {
+      return res.text();
+    });
+    parseXML(res, "BOTTOM");
+  };
+
+  const onShowResultList = (e: any) => {
+    e.preventDefault();
+
+    console.log("리스트 조회!!!");
+  };
+
+  const getKamcoList = () => {
+    //todo api 어떤거 쓸지 선택
+    const url = `http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList`;
+    const url_2 = `http://openapi.onbid.co.kr/openapi/services/UtlinsttPblsalThingInquireSvc/getPublicSaleObject`;
   };
 
   return (
@@ -137,94 +180,91 @@ function MyFilterSetting(): JSX.Element {
       <section className="filter-select-form-wrapper">
         <form id="filter-form" onSubmit={onSubmitHandler}>
           <h2>내 필터 설정</h2>
-          <label className="basic-input-label">지역</label>
-          <select className="basic-input" onChange={onSidoChangeHandler}>
-            <option>시/도</option>
-            {sido?.map((d, idx) => {
-              return (
-                <option key={idx} value={d.cd}>
-                  {d.addr_name}
-                </option>
-              );
-            })}
-          </select>
-          <select className="basic-input" onChange={onSgkChangeHandler}>
-            <option>구/군</option>
-            {sgk &&
-              sgk.map((d, idx) => {
+          <label className="basic-input-label">
+            지역
+            <select className="basic-input" onChange={onSidoChangeHandler}>
+              <option>시/도</option>
+              {sido?.map((d, idx) => {
+                return (
+                  <option key={idx} value={d.cd}>
+                    {d.addr_name}
+                  </option>
+                );
+              })}
+            </select>
+            <select className="basic-input" onChange={onSgkChangeHandler}>
+              <option>구/군</option>
+              {sgk?.map((d, idx) => {
                 return (
                   <option key={idx} value={d.cd}>
                     {d.addr_name}
                   </option>
                 );
               })}{" "}
-          </select>
-          <select className="basic-input">
-            <option>읍/면/동</option>
-            {emd?.map((d, idx) => {
-              return (
-                <option key={idx} value={d.cd}>
-                  {d.addr_name}
-                </option>
-              );
-            })}{" "}
-          </select>
-          <input
-            type="text"
-            className="basic-input"
-            placeholder="나머지주소 직접입력"
-          />
+            </select>
+            <select className="basic-input" onChange={onEmdChangeHandler}>
+              <option>읍/면/동</option>
+              {emd?.map((d, idx) => {
+                return (
+                  <option key={idx} value={d.cd}>
+                    {d.addr_name}
+                  </option>
+                );
+              })}{" "}
+            </select>
+            <input
+              type="text"
+              className="basic-input"
+              placeholder="나머지주소 직접입력"
+            />{" "}
+          </label>
           <div>
             <label className="basic-input-label">
               종류
-              <select className="basic-input" id="ctgrHirkId">
+              <select
+                className="basic-input"
+                id="ctgrHirkId"
+                onChange={onChangeMiddleLandCdHandler}
+              >
                 <option>전체</option>
-                {landTypeList &&
-                  landTypeList.map((type, idx) => {
-                    return (
-                      <option key={idx} value={type.ctgrId}>
-                        {type.ctgrNm}
-                      </option>
-                    );
-                  })}
+                {landTypeList?.map((landCd, idx) => {
+                  return (
+                    <option key={idx} value={landCd.ctgrId}>
+                      {landCd.ctgrNm}
+                    </option>
+                  );
+                })}
               </select>
             </label>
 
             <label className="basic-input-label">
               세부종류
-              <select className="basic-input" id="ctgrHirkIdMid">
+              <select
+                className="basic-input"
+                id="ctgrHirkIdBottom"
+                onChange={onChangeBottomLandCdHandler}
+              >
                 <option>전체</option>
+                {scndLandTypeList?.map((landCd, idx) => {
+                  return (
+                    <option key={idx} id={landCd.ctgrId}>
+                      {landCd.ctgrNm}
+                    </option>
+                  );
+                })}
               </select>
             </label>
           </div>
-          <div>
-            <label className="basic-input-label">
-              대지면적
-              <input className="basic-input" type="number" />
-              <span>㎡ / </span>
-            </label>
-
-            <label className="basic-input-label">
-              건물면적
-              <input className="basic-input" type="number" />
-              <span>㎡</span>
-            </label>
+          <div className="flex">
+            <input
+              type={"submit"}
+              value="필터 추가"
+              className="basic-submit-button"
+            />
+            <button onClick={onShowResultList} className="basic-cancel-button">
+              결과 보기
+            </button>
           </div>
-          <div>
-            <label className="basic-input-label">
-              감정가
-              <input className="basic-input" type="text" />
-            </label>
-            <label className="basic-input-label">
-              최저가
-              <input className="basic-input" type="text" />
-            </label>
-          </div>
-          <input
-            type={"submit"}
-            value="필터 추가"
-            className="basic-submit-button"
-          />
         </form>
       </section>
       <div>여기에 결과값이 나오는 거야 </div>
