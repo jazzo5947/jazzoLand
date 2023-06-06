@@ -1,15 +1,15 @@
-import axios from 'axios';
+import axios from "axios";
 
 const serviceKey =
-  'ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D';
+  "ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D";
 const url =
-  'http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList';
+  "http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList";
 const req_url =
-  url + '?serviceKey=' + serviceKey + '&numOfRows=10&pageNo=1&DPSL_MTD_CD=0001';
+  url + "?serviceKey=" + serviceKey + "&numOfRows=10&pageNo=1&DPSL_MTD_CD=0001";
 
-const ctgrId = '10000';
+const ctgrId = "10000";
 const ctgrMidUrl =
-  'http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo';
+  "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo";
 
 type TKamcoReqParams = {
   serviceKey: string;
@@ -64,30 +64,30 @@ type TKamcoResponse = {
 
 export function getKamcoList(params: TKamcoReqParams) {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', req_url);
+  xhr.open("GET", req_url);
   xhr.onreadystatechange = function () {
     if (this.readyState === 4) {
       alert(
-        'Status: ' +
+        "Status: " +
           this.status +
-          'nHeaders: ' +
+          "nHeaders: " +
           JSON.stringify(this.getAllResponseHeaders()) +
-          'nBody: ' +
+          "nBody: " +
           this.responseText
       );
     }
   };
 
-  xhr.send('');
+  xhr.send("");
 }
 
 export const getListTest = async () => {
   try {
     // API 요청에 필요한 정보
     const apiUrl =
-      'http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList';
+      "http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList";
     const serviceKey =
-      'ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D';
+      "ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D";
 
     // API 호출
     const response = await axios.get(apiUrl, {
@@ -95,7 +95,7 @@ export const getListTest = async () => {
         serviceKey,
         numOfRows: 10,
         pageNo: 1,
-        dpslMtdCd: '0001',
+        dpslMtdCd: "0001",
       },
     });
 
@@ -104,7 +104,7 @@ export const getListTest = async () => {
     // 파싱된 데이터를 이용하여 원하는 로직 수행
     console.log(responseData);
   } catch (error) {
-    console.error('API 호출 중 오류가 발생하였습니다.', error);
+    console.error("API 호출 중 오류가 발생하였습니다.", error);
   }
 };
 
@@ -119,10 +119,10 @@ function xmlToJson(xml: any) {
     // element
     // do attributes
     if (xml.attributes.length > 0) {
-      obj['@attributes'] = {};
+      obj["@attributes"] = {};
       for (var j = 0; j < xml.attributes.length; j++) {
         var attribute = xml.attributes.item(j);
-        obj['@attributes'][attribute.nodeName] = attribute.nodeValue;
+        obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
       }
     }
   } else if (xml.nodeType === 3) {
@@ -138,15 +138,15 @@ function xmlToJson(xml: any) {
   if (xml.hasChildNodes() && xml.childNodes.length === textNodes.length) {
     obj = [].slice.call(xml.childNodes).reduce(function (text, node: any) {
       return text + node.nodeValue;
-    }, '');
+    }, "");
   } else if (xml.hasChildNodes()) {
     for (var i = 0; i < xml.childNodes.length; i++) {
       var item = xml.childNodes.item(i);
       var nodeName = item.nodeName;
-      if (typeof obj[nodeName] == 'undefined') {
+      if (typeof obj[nodeName] == "undefined") {
         obj[nodeName] = xmlToJson(item);
       } else {
-        if (typeof obj[nodeName].push == 'undefined') {
+        if (typeof obj[nodeName].push == "undefined") {
           var old = obj[nodeName];
           obj[nodeName] = [];
           obj[nodeName].push(old);
@@ -163,7 +163,7 @@ const getXMLfromAPI = async () => {
   const reqURL = `${ctgrMidUrl}?serviceKey=${serviceKey}`;
   const response = await fetch(reqURL);
   const xmlString = await response.text();
-  let XmlNode = new DOMParser().parseFromString(xmlString, 'text/xml');
+  let XmlNode = new DOMParser().parseFromString(xmlString, "text/xml");
   console.log(xmlToJson(XmlNode));
 };
 getXMLfromAPI();

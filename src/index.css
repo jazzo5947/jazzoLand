@@ -58,7 +58,7 @@ section {
   @apply bg-orange-600 text-white py-[5px] px-[10px] my-[5px] mx-[10px] rounded cursor-pointer text-[20px];
 }
 .basic-cancel-button {
-  @apply bg-white text-gray-600  py-[5px] px-[10px] my-[5px] mx-[10px] rounded cursor-pointer text-[20px];
+  @apply bg-gray-600 text-white py-[5px] px-[10px] my-[5px] mx-[10px] rounded cursor-pointer text-[20px];
 }
 
 @media screen and (max-width: 700px) {

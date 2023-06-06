@@ -1,22 +1,20 @@
 import React, { useEffect } from "react";
-import { TFilterType, TJusoType, TLandType } from "../type/types";
+import { TFilter, TJuso, TLand } from "../type/types";
 import axios from "axios";
 
 type PMyFilterSettingProps = {
-  filterList: TFilterType[];
+  filterList: TFilter[];
 };
 
 const encCodeKey =
   "ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D";
-const decCodeKey =
-  "ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU+A==";
 
 function MyFilterSetting(): JSX.Element {
   const [accToken, setAccToken] = React.useState("");
   var errCnt = 0;
-  const [sido, setSido] = React.useState<TJusoType[]>();
-  const [sgk, setSgk] = React.useState<TJusoType[]>();
-  const [emd, setEmd] = React.useState<TJusoType[]>();
+  const [sido, setSido] = React.useState<TJuso[]>();
+  const [sgk, setSgk] = React.useState<TJuso[]>();
+  const [emd, setEmd] = React.useState<TJuso[]>();
   const [selectedJuso, setSelectedJuso] = React.useState({
     sido: "",
     sgk: "",
@@ -24,8 +22,10 @@ function MyFilterSetting(): JSX.Element {
     detail: "",
   });
 
-  const [landTypeList, setLandTypeList] = React.useState<TLandType[]>();
-  const [scndLandTypeList, setScndLandTypeList] = React.useState<TLandType[]>();
+  const [landTypeList, setLandTypeList] = React.useState<TLand[]>();
+  const [scndLandTypeList, setScndLandTypeList] = React.useState<TLand[]>();
+
+  const [filterList, setFilterList] = React.useState<TFilter[]>();
 
   useEffect(() => {
     getAccessToken();
@@ -80,18 +80,6 @@ function MyFilterSetting(): JSX.Element {
       .catch((error) => console.log(error));
   };
 
-  const getMiddleLandCd = async () => {
-    const code_url =
-      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo";
-
-    const heroku_proxy = "https://jazzo-land.herokuapp.com/";
-    const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=10000`;
-    const res = await fetch(heroku_proxy + full_url).then((res) => {
-      return res.text();
-    });
-    parseXML(res, "MID");
-  };
-
   const parseXML = (xmlData: string, type: string) => {
     const landTypeList = new Array<{
       ctgrId: string;
@@ -112,6 +100,18 @@ function MyFilterSetting(): JSX.Element {
     }
     if (type === "MID") setLandTypeList(landTypeList);
     else if (type === "BOTTOM") setScndLandTypeList(landTypeList);
+  };
+
+  const getMiddleLandCd = async () => {
+    const code_url =
+      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo";
+
+    const heroku_proxy = "https://jazzo-land.herokuapp.com/";
+    const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=10000`;
+    const res = await fetch(heroku_proxy + full_url).then((res) => {
+      return res.text();
+    });
+    parseXML(res, "MID");
   };
 
   const onSidoChangeHandler = (e: any) => {
@@ -154,9 +154,8 @@ function MyFilterSetting(): JSX.Element {
   const getBottomLandCd = async (ctgrId: string) => {
     const code_url =
       "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidBottomCodeInfo";
-
     const heroku_proxy = "https://jazzo-land.herokuapp.com/";
-    const full_url = `http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidBottomCodeInfo?serviceKey=ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D&numOfRows=10&pageNo=1&CTGR_ID=${ctgrId}`;
+    const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=${ctgrId}`;
     const res = await fetch(heroku_proxy + full_url).then((res) => {
       return res.text();
     });
@@ -255,19 +254,14 @@ function MyFilterSetting(): JSX.Element {
               </select>
             </label>
           </div>
-          <div className="flex">
-            <input
-              type={"submit"}
-              value="필터 추가"
-              className="basic-submit-button"
-            />
-            <button onClick={onShowResultList} className="basic-cancel-button">
-              결과 보기
-            </button>
-          </div>
+          <input
+            type={"submit"}
+            value="필터 추가"
+            className="basic-submit-button"
+          />
         </form>
       </section>
-      <div>여기에 결과값이 나오는 거야 </div>
+      <div id="resultBox">여기에 결과값이 나오는 거야 </div>
     </>
   );
 }

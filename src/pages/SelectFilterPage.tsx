@@ -37,8 +37,9 @@ export default function SelectFilterPage() {
   return (
     <Container>
       <p>선택한 필터에 해당하는 물건을 메일링 서비스로 받아보실 수 있습니다.</p>
-      <MyFilterList filterList={filterList} />
       <MyFilterSetting />
+      <MyFilterList filterList={filterList} />
+      <div>결과물건목록</div>
     </Container>
   );
 }
