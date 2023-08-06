@@ -62,7 +62,6 @@ function MyFilterSetting(): JSX.Element {
       })
       .then((res) => {
         const { data } = res;
-        // console.log(data);
         switch (parseInt(data.errCd)) {
           case 0:
             setResult(data.result);
@@ -105,10 +104,8 @@ function MyFilterSetting(): JSX.Element {
   const getMiddleLandCd = async () => {
     const code_url =
       "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo";
-
-    const heroku_proxy = "https://jazzo-land.herokuapp.com/";
     const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=10000`;
-    const res = await fetch(heroku_proxy + full_url).then((res) => {
+    const res = await fetch(full_url).then((res) => {
       return res.text();
     });
     parseXML(res, "MID");
@@ -133,7 +130,6 @@ function MyFilterSetting(): JSX.Element {
       return { ...prev, emd: e.target.value };
     });
   };
-  // todo 필터 저장소.. localStorage?
 
   const onSubmitHandler = (e: any) => {
     e.preventDefault();
@@ -154,9 +150,8 @@ function MyFilterSetting(): JSX.Element {
   const getBottomLandCd = async (ctgrId: string) => {
     const code_url =
       "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidBottomCodeInfo";
-    const heroku_proxy = "https://jazzo-land.herokuapp.com/";
     const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=${ctgrId}`;
-    const res = await fetch(heroku_proxy + full_url).then((res) => {
+    const res = await fetch(full_url).then((res) => {
       return res.text();
     });
     parseXML(res, "BOTTOM");
@@ -179,6 +174,7 @@ function MyFilterSetting(): JSX.Element {
       <section className="filter-select-form-wrapper">
         <form id="filter-form" onSubmit={onSubmitHandler}>
           <h2>내 필터 설정</h2>
+
           <label className="basic-input-label">
             지역
             <select className="basic-input" onChange={onSidoChangeHandler}>
@@ -217,6 +213,7 @@ function MyFilterSetting(): JSX.Element {
               placeholder="나머지주소 직접입력"
             />{" "}
           </label>
+
           <div>
             <label className="basic-input-label">
               종류
@@ -254,8 +251,9 @@ function MyFilterSetting(): JSX.Element {
               </select>
             </label>
           </div>
+
           <input
-            type={"submit"}
+            type="submit"
             value="필터 추가"
             className="basic-submit-button"
           />

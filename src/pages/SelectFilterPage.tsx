@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import Container from "../components/Container";
-import MyFilterList from "../components/my-filter-list";
-import MyFilterSetting from "../components/my-filter-setting";
+import MyFilterList from "../components/MyFilterList";
 import { TFilter } from "../type/types";
+import MyFilterSetting from "../components/MyFilterSetting";
 
 export default function SelectFilterPage() {
   const [siGunGuOptions, setSiGunGuOptions] = React.useState([]);
