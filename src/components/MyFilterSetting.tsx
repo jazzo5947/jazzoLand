@@ -1,26 +1,47 @@
-import React, { useEffect } from "react";
-import { TFilter, TJuso, TLand } from "../type/types";
-import axios from "axios";
+import React, { useEffect } from 'react';
+import { TFilter, TJuso, TLand } from '../type/types';
+import axios from 'axios';
+import { UseFormRegister, useForm } from 'react-hook-form';
 
 type PMyFilterSettingProps = {
   filterList: TFilter[];
 };
 
 const encCodeKey =
-  "ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D";
+  'ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D';
+
+//필터타입 정의하기
+// 나중에 이걸로 kamco에 요청 날려야 하자나
+// 그럼 requestType에 맞춰줘야 하지 않나
+
+const initialFilter: TFilter = {
+  id: '',
+  dpslMtdCd: '', // 매각 0001 임대 0002
+  ctgrHirkId: '', // 부동산 10000
+  ctgrHirkIdMid: '', // 하위코드
+  sido: '',
+  sgk: '',
+  emd: '',
+  goodsPriceFrom: 0,
+  goodsPriceTo: 0,
+  openPriceFrom: 0,
+  openPriceTo: 0,
+  cltrNm: '', // 물건명
+  pbctBegnDtm: '', // 입찰 시작일
+  pbctClsDtm: '', // 입찰 마감일
+  cltrMnmtNo: '', // 물건관리번호
+};
 
 function MyFilterSetting(): JSX.Element {
-  const [accToken, setAccToken] = React.useState("");
+  const [accToken, setAccToken] = React.useState('');
   var errCnt = 0;
   const [sido, setSido] = React.useState<TJuso[]>();
   const [sgk, setSgk] = React.useState<TJuso[]>();
   const [emd, setEmd] = React.useState<TJuso[]>();
-  const [selectedJuso, setSelectedJuso] = React.useState({
-    sido: "",
-    sgk: "",
-    emd: "",
-    detail: "",
-  });
+
+  const [newFilter, setNewFilter] = React.useState<TFilter>(initialFilter);
+
+  const { register, setValue, getValues } = useForm<TFilter>();
 
   const [landTypeList, setLandTypeList] = React.useState<TLand[]>();
   const [scndLandTypeList, setScndLandTypeList] = React.useState<TLand[]>();
@@ -34,18 +55,18 @@ function MyFilterSetting(): JSX.Element {
 
   const getAccessToken = async () => {
     await axios
-      .get("https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json", {
+      .get('https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json', {
         params: {
-          consumer_key: "2ebdf6cf7ddd4eafa284",
-          consumer_secret: "ee54d708b71e4eac905c",
+          consumer_key: '2ebdf6cf7ddd4eafa284',
+          consumer_secret: 'ee54d708b71e4eac905c',
         },
       })
-      .then((res) => {
+      .then(res => {
         const accessToken = res.data.result.accessToken;
         setAccToken(accessToken);
         getJuso(accessToken, setSido);
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   };
 
   const getJuso = async (
@@ -54,13 +75,13 @@ function MyFilterSetting(): JSX.Element {
     _cd?: string
   ) => {
     await axios
-      .get("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json", {
+      .get('https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json', {
         params: {
           accessToken: _token,
           cd: _cd,
         },
       })
-      .then((res) => {
+      .then(res => {
         const { data } = res;
         switch (parseInt(data.errCd)) {
           case 0:
@@ -76,7 +97,7 @@ function MyFilterSetting(): JSX.Element {
             break;
         }
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 
   const parseXML = (xmlData: string, type: string) => {
@@ -85,8 +106,8 @@ function MyFilterSetting(): JSX.Element {
       ctgrNm: string;
     }>();
     const parser = new DOMParser();
-    const parsedXml = parser.parseFromString(xmlData, "text/xml");
-    const items = parsedXml.getElementsByTagName("item");
+    const parsedXml = parser.parseFromString(xmlData, 'text/xml');
+    const items = parsedXml.getElementsByTagName('item');
 
     for (let i = 0; i < items.length; i++) {
       const ctgrId = items[i].children[1].innerHTML;
@@ -97,76 +118,55 @@ function MyFilterSetting(): JSX.Element {
         ctgrNm: ctgrNm,
       });
     }
-    if (type === "MID") setLandTypeList(landTypeList);
-    else if (type === "BOTTOM") setScndLandTypeList(landTypeList);
-  };
-
-  const getMiddleLandCd = async () => {
-    const code_url =
-      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo";
-    const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=10000`;
-    const res = await fetch(full_url).then((res) => {
-      return res.text();
-    });
-    parseXML(res, "MID");
+    if (type === 'MID') setLandTypeList(landTypeList);
+    else if (type === 'BOTTOM') setScndLandTypeList(landTypeList);
   };
 
   const onSidoChangeHandler = (e: any) => {
     getJuso(accToken, setSgk, e.target.value);
-    setSelectedJuso((prev) => {
-      return { ...prev, sido: e.target.value };
-    });
   };
 
   const onSgkChangeHandler = (e: any) => {
     getJuso(accToken, setEmd, e.target.value);
-    setSelectedJuso((prev) => {
-      return { ...prev, sgk: e.target.value };
+  };
+
+  const getMiddleLandCd = async () => {
+    const code_url =
+      'http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo';
+    const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=10000`;
+    const res = await fetch(full_url).then(res => {
+      return res.text();
     });
-  };
-
-  const onEmdChangeHandler = (e: any) => {
-    setSelectedJuso((prev) => {
-      return { ...prev, emd: e.target.value };
-    });
-  };
-
-  const onSubmitHandler = (e: any) => {
-    e.preventDefault();
-    // todo 일단 필터를 세팅하면 그 필터에 맞는 물건을 걸러오는 기능을 만들어보자
-
-    console.log(selectedJuso);
-  };
-
-  const onChangeMiddleLandCdHandler = (e: any) => {
-    const ctgrId = e.target.value;
-    getBottomLandCd(ctgrId);
-  };
-
-  const onChangeBottomLandCdHandler = (e: any) => {
-    const ctgrId = e.target.value;
+    parseXML(res, 'MID');
   };
 
   const getBottomLandCd = async (ctgrId: string) => {
     const code_url =
-      "http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidBottomCodeInfo";
+      'http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidBottomCodeInfo';
     const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=${ctgrId}`;
-    const res = await fetch(full_url).then((res) => {
+    const res = await fetch(full_url).then(res => {
       return res.text();
     });
-    parseXML(res, "BOTTOM");
+    parseXML(res, 'BOTTOM');
   };
 
   const onShowResultList = (e: any) => {
     e.preventDefault();
 
-    console.log("리스트 조회!!!");
+    console.log('리스트 조회!!!');
   };
 
   const getKamcoList = () => {
     //todo api 어떤거 쓸지 선택
     const url = `http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList`;
     const url_2 = `http://openapi.onbid.co.kr/openapi/services/UtlinsttPblsalThingInquireSvc/getPublicSaleObject`;
+  };
+
+  const onSubmitHandler = (e: any) => {
+    e.preventDefault();
+    // todo 일단 필터를 세팅하면 그 필터에 맞는 물건을 걸러오는 기능을 만들어보자
+
+    console.log(newFilter);
   };
 
   return (
@@ -177,7 +177,11 @@ function MyFilterSetting(): JSX.Element {
 
           <label className="basic-input-label">
             지역
-            <select className="basic-input" onChange={onSidoChangeHandler}>
+            <select
+              className="basic-input"
+              {...register('sido')}
+              onChange={onSidoChangeHandler}
+            >
               <option>시/도</option>
               {sido?.map((d, idx) => {
                 return (
@@ -187,17 +191,21 @@ function MyFilterSetting(): JSX.Element {
                 );
               })}
             </select>
-            <select className="basic-input" onChange={onSgkChangeHandler}>
-              <option>구/군</option>
+            <select
+              className="basic-input"
+              {...register('sgk')}
+              onChange={onSgkChangeHandler}
+            >
+              <option>시/군/구</option>
               {sgk?.map((d, idx) => {
                 return (
                   <option key={idx} value={d.cd}>
                     {d.addr_name}
                   </option>
                 );
-              })}{" "}
+              })}{' '}
             </select>
-            <select className="basic-input" onChange={onEmdChangeHandler}>
+            <select className="basic-input" {...register('emd')}>
               <option>읍/면/동</option>
               {emd?.map((d, idx) => {
                 return (
@@ -205,13 +213,13 @@ function MyFilterSetting(): JSX.Element {
                     {d.addr_name}
                   </option>
                 );
-              })}{" "}
+              })}{' '}
             </select>
             <input
               type="text"
               className="basic-input"
               placeholder="나머지주소 직접입력"
-            />{" "}
+            />{' '}
           </label>
 
           <div>
@@ -220,7 +228,7 @@ function MyFilterSetting(): JSX.Element {
               <select
                 className="basic-input"
                 id="ctgrHirkId"
-                onChange={onChangeMiddleLandCdHandler}
+                {...register('ctgrHirkId')}
               >
                 <option>전체</option>
                 {landTypeList?.map((landCd, idx) => {
@@ -238,7 +246,7 @@ function MyFilterSetting(): JSX.Element {
               <select
                 className="basic-input"
                 id="ctgrHirkIdBottom"
-                onChange={onChangeBottomLandCdHandler}
+                {...register('ctgrHirkIdMid')}
               >
                 <option>전체</option>
                 {scndLandTypeList?.map((landCd, idx) => {
