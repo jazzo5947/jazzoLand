@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { TFilter, TJuso, TLand } from '../type/types';
 import axios from 'axios';
-import { UseFormRegister, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 type PMyFilterSettingProps = {
   filterList: TFilter[];
@@ -41,7 +41,7 @@ function MyFilterSetting(): JSX.Element {
 
   const [newFilter, setNewFilter] = React.useState<TFilter>(initialFilter);
 
-  const { register, setValue, getValues } = useForm<TFilter>();
+  const { register, handleSubmit, setValue, getValues } = useForm<TFilter>();
 
   const [landTypeList, setLandTypeList] = React.useState<TLand[]>();
   const [scndLandTypeList, setScndLandTypeList] = React.useState<TLand[]>();
@@ -162,69 +162,68 @@ function MyFilterSetting(): JSX.Element {
     const url_2 = `http://openapi.onbid.co.kr/openapi/services/UtlinsttPblsalThingInquireSvc/getPublicSaleObject`;
   };
 
-  const onSubmitHandler = (e: any) => {
-    e.preventDefault();
-    // todo 일단 필터를 세팅하면 그 필터에 맞는 물건을 걸러오는 기능을 만들어보자
-
-    console.log(newFilter);
+  const onSubmit: SubmitHandler<TFilter> = data => {
+    console.log(data);
   };
 
   return (
     <>
-      <section className="filter-select-form-wrapper">
-        <form id="filter-form" onSubmit={onSubmitHandler}>
+      <div className="filter-select-form-wrapper">
+        <form id="filter-form" onSubmit={handleSubmit(onSubmit)}>
           <h2>내 필터 설정</h2>
 
-          <label className="basic-input-label">
-            지역
-            <select
-              className="basic-input"
-              {...register('sido')}
-              onChange={onSidoChangeHandler}
-            >
-              <option>시/도</option>
-              {sido?.map((d, idx) => {
-                return (
-                  <option key={idx} value={d.cd}>
-                    {d.addr_name}
-                  </option>
-                );
-              })}
-            </select>
-            <select
-              className="basic-input"
-              {...register('sgk')}
-              onChange={onSgkChangeHandler}
-            >
-              <option>시/군/구</option>
-              {sgk?.map((d, idx) => {
-                return (
-                  <option key={idx} value={d.cd}>
-                    {d.addr_name}
-                  </option>
-                );
-              })}{' '}
-            </select>
-            <select className="basic-input" {...register('emd')}>
-              <option>읍/면/동</option>
-              {emd?.map((d, idx) => {
-                return (
-                  <option key={idx} value={d.cd}>
-                    {d.addr_name}
-                  </option>
-                );
-              })}{' '}
-            </select>
-            <input
-              type="text"
-              className="basic-input"
-              placeholder="나머지주소 직접입력"
-            />{' '}
-          </label>
-
-          <div>
+          <section>
+            <h3>지역</h3>
             <label className="basic-input-label">
-              종류
+              <select
+                className="basic-input"
+                {...register('sido')}
+                onChange={onSidoChangeHandler}
+              >
+                <option>시/도</option>
+                {sido?.map((d, idx) => {
+                  return (
+                    <option key={idx} value={d.cd}>
+                      {d.addr_name}
+                    </option>
+                  );
+                })}
+              </select>
+              <select
+                className="basic-input"
+                {...register('sgk')}
+                onChange={onSgkChangeHandler}
+              >
+                <option>시/군/구</option>
+                {sgk?.map((d, idx) => {
+                  return (
+                    <option key={idx} value={d.cd}>
+                      {d.addr_name}
+                    </option>
+                  );
+                })}{' '}
+              </select>
+              <select className="basic-input" {...register('emd')}>
+                <option>읍/면/동</option>
+                {emd?.map((d, idx) => {
+                  return (
+                    <option key={idx} value={d.cd}>
+                      {d.addr_name}
+                    </option>
+                  );
+                })}{' '}
+              </select>
+              <input
+                type="text"
+                className="basic-input"
+                placeholder="나머지주소 직접입력"
+              />
+            </label>
+          </section>
+
+          <section>
+            <h3>종류</h3>
+            <label className="basic-input-label">
               <select
                 className="basic-input"
                 id="ctgrHirkId"
@@ -242,7 +241,6 @@ function MyFilterSetting(): JSX.Element {
             </label>
 
             <label className="basic-input-label">
-              세부종류
               <select
                 className="basic-input"
                 id="ctgrHirkIdBottom"
@@ -258,7 +256,55 @@ function MyFilterSetting(): JSX.Element {
                 })}
               </select>
             </label>
-          </div>
+          </section>
+
+          <section>
+            <h3>감정가/최저가</h3>
+            <div>
+              <label>
+                감정가하한
+                <input
+                  className="basic-input"
+                  type="text"
+                  {...register('goodsPriceFrom')}
+                />
+                만원
+              </label>
+            </div>
+            <div>
+              <label>
+                감정가상한
+                <input
+                  className="basic-input"
+                  type="text"
+                  {...register('goodsPriceTo')}
+                />
+                만원
+              </label>
+            </div>
+            <div>
+              <label>
+                최저입찰가
+                <input
+                  className="basic-input"
+                  type="text"
+                  {...register('openPriceFrom')}
+                />
+                만원
+              </label>
+            </div>
+            <div>
+              <label>
+                최고입찰가
+                <input
+                  className="basic-input"
+                  type="text"
+                  {...register('openPriceTo')}
+                />
+                만원
+              </label>
+            </div>
+          </section>
 
           <input
             type="submit"
@@ -266,7 +312,7 @@ function MyFilterSetting(): JSX.Element {
             className="basic-submit-button"
           />
         </form>
-      </section>
+      </div>
       <div id="resultBox">여기에 결과값이 나오는 거야 </div>
     </>
   );
