@@ -159,11 +159,11 @@ function xmlToJson(xml: any) {
 }
 
 const getXMLfromAPI = async () => {
-  const url = ctgrMidUrl;
   const reqURL = `${ctgrMidUrl}?serviceKey=${serviceKey}`;
   const response = await fetch(reqURL);
   const xmlString = await response.text();
   let XmlNode = new DOMParser().parseFromString(xmlString, "text/xml");
   console.log(xmlToJson(XmlNode));
 };
+
 getXMLfromAPI();
