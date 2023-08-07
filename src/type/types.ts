@@ -9,10 +9,10 @@ export type TFilter = {
   sgk: string;
   emd: string;
 
-  goodsPriceFrom: number;
+  goodsPriceFrom: number; // 감정가
   goodsPriceTo: number;
 
-  openPriceFrom: number;
+  openPriceFrom: number; // 입찰가
   openPriceTo: number;
 
   cltrNm: string; // 물건명
