@@ -5,9 +5,14 @@ export type TFilter = {
   ctgrHirkId: string; // 부동산 10000
   ctgrHirkIdMid: string; // 하위코드
 
+  ctgrHirkName?: string;
+  ctgrHirkNameMid?: string;
+
   sido: string;
   sgk: string;
   emd: string;
+
+  juso?: string; // 보여주기 위한
 
   goodsPriceFrom: number; // 감정가
   goodsPriceTo: number;
