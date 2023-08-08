@@ -1,5 +1,5 @@
-import React from "react";
-import { TFilter } from "../type/types";
+import React from 'react';
+import { TFilter } from '../type/types';
 
 type PMyFilterListProps = {
   filterList: TFilter[];
@@ -22,8 +22,11 @@ function MyFilterList(props: PMyFilterListProps) {
               key={idx}
               className="border rounded p-[5px] mb-[5px] border-black flex justify-between w-[50%]"
             >
-              <p>{filter.id} 원</p>
               <button>X</button>
+              <span>{filter.juso}</span>/<span>{filter.ctgrHirkName}</span>/
+              <span>{filter.ctgrHirkNameMid}</span>/
+              <span>{filter.goodsPriceFrom}</span>/
+              <span>{filter.openPriceFrom}</span>
             </div>
           );
         })}

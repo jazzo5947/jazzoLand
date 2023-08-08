@@ -19,9 +19,12 @@ const initialFilter: TFilter = {
   dpslMtdCd: '', // 매각 0001 임대 0002
   ctgrHirkId: '', // 부동산 10000
   ctgrHirkIdMid: '', // 하위코드
+  ctgrHirkName: '', // 부동산 10000
+  ctgrHirkNameMid: '', // 하위코드
   sido: '',
   sgk: '',
   emd: '',
+  juso: '',
   goodsPriceFrom: 0,
   goodsPriceTo: 0,
   openPriceFrom: 0,
@@ -32,21 +35,24 @@ const initialFilter: TFilter = {
   cltrMnmtNo: '', // 물건관리번호
 };
 
-function MyFilterSetting(): JSX.Element {
+type TFilterSettingProps = {
+  setFilterList: (list: TFilter[]) => void;
+  getFilter: (filter: TFilter) => void;
+};
+
+function MyFilterSetting({ getFilter }: TFilterSettingProps): JSX.Element {
   const [accToken, setAccToken] = React.useState('');
   var errCnt = 0;
   const [sido, setSido] = React.useState<TJuso[]>();
   const [sgk, setSgk] = React.useState<TJuso[]>();
   const [emd, setEmd] = React.useState<TJuso[]>();
 
-  const [newFilter, setNewFilter] = React.useState<TFilter>(initialFilter);
-
   const { register, handleSubmit, setValue, getValues } = useForm<TFilter>();
 
   const [landTypeList, setLandTypeList] = React.useState<TLand[]>();
   const [scndLandTypeList, setScndLandTypeList] = React.useState<TLand[]>();
 
-  const [filterList, setFilterList] = React.useState<TFilter[]>();
+  // const [filterList, setFilterList] = React.useState<TFilter[]>();
 
   useEffect(() => {
     getAccessToken();
@@ -123,11 +129,42 @@ function MyFilterSetting(): JSX.Element {
   };
 
   const onSidoChangeHandler = (e: any) => {
+    const sidoName = e.target.selectedOptions[0].innerHTML;
+    setValue('juso', sidoName);
     getJuso(accToken, setSgk, e.target.value);
   };
 
   const onSgkChangeHandler = (e: any) => {
+    const sgkName = e.target.selectedOptions[0].innerHTML;
+    const data = getValues();
+    setValue('juso', data.juso + ' ' + sgkName);
     getJuso(accToken, setEmd, e.target.value);
+  };
+
+  const onEmdChangeHandler = (e: any) => {
+    const emdName = e.target.selectedOptions[0].innerHTML;
+    const data = getValues();
+    setValue('juso', data.juso + ' ' + emdName);
+  };
+
+  const onMiddleLandCdChangeHander = (e: any) => {
+    if (e.target.value !== 'all') {
+      const name = e.target.selectedOptions[0].innerHTML;
+      setValue('ctgrHirkName', name);
+      getBottomLandCd(e.target.value);
+    } else {
+      setValue('ctgrHirkName', '전체');
+      getBottomLandCd('10000');
+    }
+  };
+
+  const onBottomLandCdChangeHander = (e: any) => {
+    if (e.target.value === 'all') {
+      setValue('ctgrHirkNameMid', '전체');
+    } else {
+      const name = e.target.selectedOptions[0].innerHTML;
+      setValue('ctgrHirkNameMid', name);
+    }
   };
 
   const getMiddleLandCd = async () => {
@@ -150,12 +187,6 @@ function MyFilterSetting(): JSX.Element {
     parseXML(res, 'BOTTOM');
   };
 
-  const onShowResultList = (e: any) => {
-    e.preventDefault();
-
-    console.log('리스트 조회!!!');
-  };
-
   const getKamcoList = () => {
     //todo api 어떤거 쓸지 선택
     const url = `http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList`;
@@ -163,7 +194,7 @@ function MyFilterSetting(): JSX.Element {
   };
 
   const onSubmit: SubmitHandler<TFilter> = data => {
-    console.log(data);
+    getFilter(data);
   };
 
   return (
@@ -180,7 +211,7 @@ function MyFilterSetting(): JSX.Element {
                 {...register('sido')}
                 onChange={onSidoChangeHandler}
               >
-                <option>시/도</option>
+                <option value="all">시/도</option>
                 {sido?.map((d, idx) => {
                   return (
                     <option key={idx} value={d.cd}>
@@ -194,7 +225,7 @@ function MyFilterSetting(): JSX.Element {
                 {...register('sgk')}
                 onChange={onSgkChangeHandler}
               >
-                <option>시/군/구</option>
+                <option value="all">시/군/구</option>
                 {sgk?.map((d, idx) => {
                   return (
                     <option key={idx} value={d.cd}>
@@ -203,8 +234,12 @@ function MyFilterSetting(): JSX.Element {
                   );
                 })}{' '}
               </select>
-              <select className="basic-input" {...register('emd')}>
-                <option>읍/면/동</option>
+              <select
+                className="basic-input"
+                {...register('emd')}
+                onChange={onEmdChangeHandler}
+              >
+                <option value="all">읍/면/동</option>
                 {emd?.map((d, idx) => {
                   return (
                     <option key={idx} value={d.cd}>
@@ -228,8 +263,9 @@ function MyFilterSetting(): JSX.Element {
                 className="basic-input"
                 id="ctgrHirkId"
                 {...register('ctgrHirkId')}
+                onChange={onMiddleLandCdChangeHander}
               >
-                <option>전체</option>
+                <option value="all">전체</option>
                 {landTypeList?.map((landCd, idx) => {
                   return (
                     <option key={idx} value={landCd.ctgrId}>
@@ -245,8 +281,9 @@ function MyFilterSetting(): JSX.Element {
                 className="basic-input"
                 id="ctgrHirkIdBottom"
                 {...register('ctgrHirkIdMid')}
+                onChange={onBottomLandCdChangeHander}
               >
-                <option>전체</option>
+                <option value="all">전체</option>
                 {scndLandTypeList?.map((landCd, idx) => {
                   return (
                     <option key={idx} id={landCd.ctgrId}>
@@ -269,9 +306,8 @@ function MyFilterSetting(): JSX.Element {
                   {...register('goodsPriceFrom')}
                 />
                 만원
-              </label>
-            </div>
-            <div>
+              </label>{' '}
+              /{' '}
               <label>
                 감정가상한
                 <input
@@ -291,9 +327,8 @@ function MyFilterSetting(): JSX.Element {
                   {...register('openPriceFrom')}
                 />
                 만원
-              </label>
-            </div>
-            <div>
+              </label>{' '}
+              /{' '}
               <label>
                 최고입찰가
                 <input
@@ -313,7 +348,6 @@ function MyFilterSetting(): JSX.Element {
           />
         </form>
       </div>
-      <div id="resultBox">여기에 결과값이 나오는 거야 </div>
     </>
   );
 }
