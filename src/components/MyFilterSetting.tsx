@@ -2,14 +2,11 @@ import React, { useEffect } from 'react';
 import { TFilter, TJuso, TLand } from '../type/types';
 import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { bottomCodeInfoURL, encodedKey, middleCodeInfoURL } from '../type/info';
 
 type PMyFilterSettingProps = {
   filterList: TFilter[];
 };
-
-const encCodeKey =
-  'ZwxVklLsL6zgVOKa4gEuD9BHrrEh8uwsxG2WMCerSG440FruBQhdMwzyjinpsNc5W0CtPlWOKbtBHrEx3oKU%2BA%3D%3D';
-
 //필터타입 정의하기
 // 나중에 이걸로 kamco에 요청 날려야 하자나
 // 그럼 requestType에 맞춰줘야 하지 않나
@@ -168,9 +165,7 @@ function MyFilterSetting({ getFilter }: TFilterSettingProps): JSX.Element {
   };
 
   const getMiddleLandCd = async () => {
-    const code_url =
-      'http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidMiddleCodeInfo';
-    const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=10000`;
+    const full_url = `${middleCodeInfoURL}?serviceKey=${encodedKey}&numOfRows=10&pageNo=1&CTGR_ID=10000`;
     const res = await fetch(full_url).then(res => {
       return res.text();
     });
@@ -178,19 +173,11 @@ function MyFilterSetting({ getFilter }: TFilterSettingProps): JSX.Element {
   };
 
   const getBottomLandCd = async (ctgrId: string) => {
-    const code_url =
-      'http://openapi.onbid.co.kr/openapi/services/OnbidCodeInfoInquireSvc/getOnbidBottomCodeInfo';
-    const full_url = `${code_url}?serviceKey=${encCodeKey}&numOfRows=10&pageNo=1&CTGR_ID=${ctgrId}`;
+    const full_url = `${bottomCodeInfoURL}?serviceKey=${encodedKey}&numOfRows=10&pageNo=1&CTGR_ID=${ctgrId}`;
     const res = await fetch(full_url).then(res => {
       return res.text();
     });
     parseXML(res, 'BOTTOM');
-  };
-
-  const getKamcoList = () => {
-    //todo api 어떤거 쓸지 선택
-    const url = `http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList`;
-    const url_2 = `http://openapi.onbid.co.kr/openapi/services/UtlinsttPblsalThingInquireSvc/getPublicSaleObject`;
   };
 
   const onSubmit: SubmitHandler<TFilter> = data => {

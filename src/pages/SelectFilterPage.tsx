@@ -4,55 +4,13 @@ import MyFilterList from '../components/MyFilterList';
 import { TFilter } from '../type/types';
 import MyFilterSetting from '../components/MyFilterSetting';
 
-const defaultFilterList: TFilter[] = [
-  {
-    id: '1',
-    dpslMtdCd: '0001',
-    ctgrHirkId: 'string; // 부동산 10000',
-    ctgrHirkIdMid: 'string; // 하위코드',
-
-    sido: 'string;',
-    sgk: 'string;',
-    emd: 'string;',
-
-    goodsPriceFrom: 100,
-    goodsPriceTo: 1000,
-
-    openPriceFrom: 100,
-    openPriceTo: 1000,
-
-    cltrNm: 'string; // 물건명',
-    pbctBegnDtm: 'string; // 입찰 시작일',
-    pbctClsDtm: 'string; // 입찰 마감일',
-    cltrMnmtNo: 'string; // 물건관리번호',
-  },
-  {
-    id: '2',
-    dpslMtdCd: '0001',
-    ctgrHirkId: 'string; // fasfdffasf부동산 10000',
-    ctgrHirkIdMid: 'string; // 하sdfasf위코드',
-
-    sido: 'stdsfafring;',
-    sgk: 'strisdafafsang;',
-    emd: 'strifsdfsadfafng;',
-
-    goodsPriceFrom: 100,
-    goodsPriceTo: 1000,
-
-    openPriceFrom: 100,
-    openPriceTo: 1000,
-
-    cltrNm: 'strinsdafsfdsfasdfsdg; // 물건명',
-    pbctBegnDtm: 'string; fdasfasf// 입찰 시작일',
-    pbctClsDtm: 'string; dsfads// 입찰 마감일',
-    cltrMnmtNo: 'string; sfasdf// 물건관리번호',
-  },
-];
+const newCltrListURL =
+  'http://openapi.onbid.co.kr/openapi/services/ThingInfoInquireSvc/getUnifyNewCltrList';
 
 export default function SelectFilterPage() {
   const [siGunGuOptions, setSiGunGuOptions] = React.useState([]);
 
-  const [filterList, setFilterList] = React.useState(defaultFilterList);
+  const [filterList, setFilterList] = React.useState<TFilter[]>([]);
 
   useEffect(() => {}, []);
 
@@ -62,6 +20,9 @@ export default function SelectFilterPage() {
     });
   };
 
+  // filterList를 params로 보내서 물건 목록을 가져와야 하는데요
+
+  // todo 나중에 페이지를 나눠야겠다 필터 설정 페이지, 물건 목록 페이지
   // todo react-table 라이브러리 사용해보기
 
   return (
