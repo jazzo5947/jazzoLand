@@ -2,7 +2,12 @@ import React, { useEffect } from 'react';
 import { TFilter, TJuso, TLand } from '../type/types';
 import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { bottomCodeInfoURL, encodedKey, middleCodeInfoURL } from '../type/info';
+import {
+  addressCodeURL,
+  bottomCodeInfoURL,
+  encodedKey,
+  middleCodeInfoURL,
+} from '../type/info';
 
 type PMyFilterSettingProps = {
   filterList: TFilter[];
@@ -78,7 +83,7 @@ function MyFilterSetting({ getFilter }: TFilterSettingProps): JSX.Element {
     _cd?: string
   ) => {
     await axios
-      .get('https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json', {
+      .get(addressCodeURL, {
         params: {
           accessToken: _token,
           cd: _cd,

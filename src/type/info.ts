@@ -16,6 +16,9 @@ export const privateContractURL =
   'http://openapi.onbid.co.kr/openapi/services/ThingInfoInquireSvc/getUnifyPrivateContractCltrList';
 
 // 캠코공매물건목록조회
-
 export const kamcoCltrURL =
   'http://openapi.onbid.co.kr/openapi/services/KamcoPblsalThingInquireSvc/getKamcoPbctCltrList';
+
+// 시군구 조회
+export const addressCodeURL =
+  'https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json';

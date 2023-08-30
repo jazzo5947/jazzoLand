@@ -3,24 +3,25 @@ import Container from '../components/Container';
 import MyFilterList from '../components/MyFilterList';
 import { TFilter } from '../type/types';
 import MyFilterSetting from '../components/MyFilterSetting';
-
-const newCltrListURL =
-  'http://openapi.onbid.co.kr/openapi/services/ThingInfoInquireSvc/getUnifyNewCltrList';
+import axios from 'axios';
+import { encodedKey, newCltrURL } from '../type/info';
 
 export default function SelectFilterPage() {
-  const [siGunGuOptions, setSiGunGuOptions] = React.useState([]);
-
   const [filterList, setFilterList] = React.useState<TFilter[]>([]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(filterList);
+
+    axios
+      .get(`${newCltrURL}?serviceKey=${encodedKey}&numOfRows=10&pageNo=1&`)
+      .then(res => console.log(res.data));
+  }, [filterList]);
 
   const getFilter = (filter: TFilter) => {
     setFilterList(prev => {
       return [...prev, filter];
     });
   };
-
-  // filterList를 params로 보내서 물건 목록을 가져와야 하는데요
 
   // todo 나중에 페이지를 나눠야겠다 필터 설정 페이지, 물건 목록 페이지
   // todo react-table 라이브러리 사용해보기

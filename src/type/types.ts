@@ -1,30 +1,30 @@
 export type TFilter = {
-  id: string;
-  dpslMtdCd: string; // 매각 0001 임대 0002
+  id: string; // 이건 내가 쓰려고 추가한거
+  dpslMtdCd: string; // 매각 0001 임대 0002 필수값 이것만
 
-  ctgrHirkId: string; // 부동산 10000
-  ctgrHirkIdMid: string; // 하위코드
+  ctgrHirkId?: string; // 부동산 10000
+  ctgrHirkIdMid?: string; // 하위코드
 
   ctgrHirkName?: string;
   ctgrHirkNameMid?: string;
 
-  sido: string;
-  sgk: string;
-  emd: string;
+  sido?: string;
+  sgk?: string;
+  emd?: string;
 
   juso?: string; // 보여주기 위한
 
-  goodsPriceFrom: number; // 감정가
-  goodsPriceTo: number;
+  goodsPriceFrom?: number; // 감정가
+  goodsPriceTo?: number;
 
-  openPriceFrom: number; // 입찰가
-  openPriceTo: number;
+  openPriceFrom?: number; // 입찰가
+  openPriceTo?: number;
 
-  cltrNm: string; // 물건명
+  cltrNm?: string; // 물건명
 
-  pbctBegnDtm: string; // 입찰 시작일
-  pbctClsDtm: string; // 입찰 마감일
-  cltrMnmtNo: string; // 물건관리번호
+  pbctBegnDtm?: string; // 입찰 시작일
+  pbctClsDtm?: string; // 입찰 마감일
+  cltrMnmtNo?: string; // 물건관리번호
 };
 
 export type TItem = {
